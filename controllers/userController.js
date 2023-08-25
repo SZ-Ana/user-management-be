@@ -37,6 +37,7 @@ const createUser = async (req, res) => {
 // get users
 const getUsers = async (req, res) => {
   const users = await User.find({}).sort({ createdAt: -1 });
+  console.log(users);
   handleSuccess(res, users);
 };
 
