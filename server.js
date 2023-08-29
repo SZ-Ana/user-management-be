@@ -20,7 +20,7 @@ app.use(loggingMiddleware);
 // }
 
 // Allow requests from specified origins
-const allowedOrigins = ["https://localhost:5174", "http://localhost:5173"]; // Add your frontend domain(s)
+const allowedOrigins = ["http://localhost:5174", "http://localhost:5173"]; // Add your frontend domain(s)
 const corsOptions = {
   origin: (origin, callback) => {
     if (allowedOrigins.includes(origin) || !origin) {
