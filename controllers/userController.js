@@ -18,7 +18,6 @@ const handleError = (res, statusCode, errorMessage) => {
 const createUser = async (req, res) => {
   const { username, firstname, lastname, email, contactNumber, password } =
     req.body;
-  console.log(req.body);
   try {
     const user = await User.create({
       username,
@@ -31,7 +30,7 @@ const createUser = async (req, res) => {
     handleSuccess(res, user);
   } catch (error) {
     console.log(error.message);
-    handleError(res, HTTP_STATUS_BAD_REQUEST, error.message);
+    handleError(res, HTTP_STATUS_BAD_REQUEST, error);
   }
 };
 

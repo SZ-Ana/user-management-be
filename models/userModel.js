@@ -19,16 +19,15 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      required: true,
-      // required: [true, "Please input an email!"],
-      // unique: true,
-      // validate: (email) => {
-      //   return validator.isEmail(email);
-      // },
+      required: [true, "Email required."],
+      unique: true,
+      validate: (email) => {
+        return validator.isEmail(email);
+      },
     },
     contactNumber: {
       type: Number,
-      required: true,
+      required: [true, "Contact number should be a number"],
     },
     password: {
       type: String,
