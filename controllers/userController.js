@@ -7,8 +7,8 @@ const {
   HTTP_STATUS_INTERNAL_SERVER_ERROR,
 } = require("../constants/httpStatusCodes");
 
-const handleSuccess = (res, data) => {
-  res.status(HTTP_STATUS_OK).json(data);
+const handleSuccess = (res, data, message) => {
+  res.status(HTTP_STATUS_OK).json({ data: data, message: message });
 };
 
 const handleError = (res, statusCode, errorMessage) => {
@@ -27,7 +27,7 @@ const createUser = async (req, res) => {
       contactNumber,
       password,
     });
-    handleSuccess(res, user);
+    handleSuccess(res, user, "create");
   } catch (error) {
     console.log(error.message);
     handleError(res, HTTP_STATUS_BAD_REQUEST, error);
@@ -38,7 +38,8 @@ const createUser = async (req, res) => {
 const getUsers = async (req, res) => {
   const users = await User.find({}).sort({ createdAt: -1 });
   console.log(users);
-  handleSuccess(res, users);
+  handleSuccess(res, users, "read");
+  // pagination
 };
 
 const getUser = async (req, res) => {
@@ -54,7 +55,7 @@ const getUser = async (req, res) => {
       handleError(res, HTTP_STATUS_NOT_FOUND, "No such user");
       return;
     }
-    handleSuccess(res, user);
+    handleSuccess(res, user, "read");
   } catch (error) {
     handleError(res, HTTP_STATUS_INTERNAL_SERVER_ERROR, error.message);
   }
@@ -65,7 +66,7 @@ const updateUser = async (req, res) => {
   const { username, firstname, lastname, email, contactNumber } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    handleError(res, HTTP_STATUS_NOT_FOUND, "No such user");
+    handleError(res, HTTP_STATUS_NOT_FOUND, "No such user " + id);
     return;
   }
 
@@ -79,7 +80,7 @@ const updateUser = async (req, res) => {
       handleError(res, HTTP_STATUS_NOT_FOUND, "No such user");
       return;
     }
-    handleSuccess(res, user);
+    handleSuccess(res, user, "update");
   } catch (error) {
     handleError(res, HTTP_STATUS_INTERNAL_SERVER_ERROR, error.message);
   }
@@ -89,7 +90,7 @@ const deleteUser = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    handleError(res, HTTP_STATUS_NOT_FOUND, "No such user");
+    handleError(res, HTTP_STATUS_NOT_FOUND, "No such user " + id);
     return;
   }
 
@@ -99,7 +100,7 @@ const deleteUser = async (req, res) => {
       handleError(res, HTTP_STATUS_NOT_FOUND, "No such user");
       return;
     }
-    handleSuccess(res, user);
+    handleSuccess(res, user, "delete");
   } catch (error) {
     handleError(res, HTTP_STATUS_INTERNAL_SERVER_ERROR, error.message);
   }
